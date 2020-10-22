@@ -1,5 +1,5 @@
 /*
-*   LR_5 // VARIANT_19
+*   LR_5 // VARIANT_16
 */
 
 #include <iostream>
@@ -9,6 +9,7 @@
 #include <map>
 #include <vector>
 #include <functional>
+#include <set>
 
 void print(std::pair<int, std::string> n) 
 {
@@ -20,6 +21,14 @@ void print_vec(int t)
 	std::cout << t << " ";
 }
 
+bool negative(int g)
+{
+	if (g < 0)
+		return true;
+	else
+		return false;
+}
+
 int main()
 {
 	std::cout << "Task1: " << std::endl;
@@ -27,21 +36,20 @@ int main()
 	std::for_each(keys.begin(), keys.end(), print); 
 	std::cout << std::endl;
 
-	std::cout << "Task 1.1: " << std::endl; // delete elements with keys "1" and "2"
+	std::cout << "Task 1.1: " << std::endl; // insert 2 new values with key "4"
+	keys.insert(std::make_pair<int, std::string>(4, "new1"));
+	keys.insert(std::make_pair<int, std::string>(4, "new2"));
+	std::for_each(keys.begin(), keys.end(), print);
+	std::cout << std::endl;
+
+	std::cout << "Task 1.2: " << std::endl; // delete elements with key "2"
 	for (auto t = keys.begin(); t != keys.end(); t++)
 	{
-		if ((t->first == 1) || (t->first == 2))
+		if (t->first == 2)
 			t = keys.erase(t);
 		else
 			++t;
 	}
-	std::for_each(keys.begin(), keys.end(), print);
-	std::cout << std::endl;
-
-	std::cout << "Task 1.2: " << std::endl; // insert 3 new values with key "3"
-	keys.insert(std::make_pair<int, std::string>(3, "new1"));
-	keys.insert(std::make_pair<int, std::string>(3, "new2"));
-	keys.insert(std::make_pair<int, std::string>(3, "new3"));
 	std::for_each(keys.begin(), keys.end(), print);
 	std::cout << std::endl;
 
@@ -53,8 +61,8 @@ int main()
 	std::cout << std::endl;
 
 	std::cout << "Task 2: " << std::endl;
-	std::cout << "Task 2.1: " << std::endl; // count number of elements, which have keys in the range from -2 to 6
-	int negative_counter = std::count_if(cards.begin(), cards.end(), [](int i) {return ((i > -2) && (i < 6)); });
+	std::cout << "Task 2.1: " << std::endl; // count number of elements, which have keys with negative values
+	int negative_counter = std::count_if(cards.begin(), cards.end(), [](int i) {return i < 0; });
 	std::cout << "Number of this elements: " << negative_counter << std::endl;
 
 	std::cout << "Task 2.2: " << std::endl; // transform all keys in "vector" by std::transform
@@ -64,19 +72,25 @@ int main()
 	std::cout << std::endl;
 
 	std::cout << "Task 3: " << std::endl;
-	std::cout << "Task 3.1: " << std::endl; // find element equal "3"
-	auto finder_of_3 = std::find(keys_vector.begin(), keys_vector.end(), 3);
+	std::cout << "Task 3.1: " << std::endl; // find element equal "5"
+	auto finder_of_3 = std::find(keys_vector.begin(), keys_vector.end(), 5);
 	if (finder_of_3 == keys_vector.end())
 		std::cout << "There is no one '3' in this vector" << std::endl;
 	else
 		std::cout << finder_of_3 - keys_vector.begin() << std::endl;
 
-	std::cout << "Task 3.2: " << std::endl; // repleace negative elements on "0"
-	std::replace_if(keys_vector.begin(), keys_vector.end(), std::bind(std::less<int>(), std::placeholders::_1, 3), 0);
+	std::cout << "Task 3.2: " << std::endl; // repleace negative elements on "6"
+	std::replace_if(keys_vector.begin(), keys_vector.end(), std::bind(std::less<int>(), std::placeholders::_1, negative), 6);
 	std::for_each(keys_vector.begin(), keys_vector.end(), print_vec);
 	std::cout << std::endl;
 
-	std::cout << "Task 3.3: " << std::endl;
+	std::cout << "Task 3.3: " << std::endl; // sort array from more to less
+	std::sort(keys_vector.begin(), keys_vector.end(), [](int a, int b) {return a > b; });
+	std::for_each(keys_vector.begin(), keys_vector.end(), print_vec);
+	std::cout << std::endl;
 
+	std::cout << "Task 3.4" << std::endl; // copy values in unordered set of unique elements
+	std::set<int> set(keys_vector.begin(), keys_vector.end());
+	std::for_each(keys_vector.begin(), keys_vector.end(), print_vec);
 	return 0;
 }
